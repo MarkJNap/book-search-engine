@@ -22,11 +22,11 @@ const resolvers = {
             const user = await User.findOne({ email });
 
             if (!user) {
-                // Change to "Incorrect credentials" after testing
-                throw new AuthenticationError('No user found with this email address');
+                throw new AuthenticationError('Incorrect credentials');
             }
 
             const correctPw = await user.isCorrectPassword(password);
+
             if (!correctPw) {
                 throw new AuthenticationError('Incorrect credentials');
             }
@@ -49,7 +49,7 @@ const resolvers = {
             if (context.user) {
                 const updatedUser = await User.findOneAndUpdate(
                     { _id: context.user._id },
-                    { $pull: {savedBooks: { bookId: bookId } } },
+                    { $pull: { savedBooks: { bookId: bookId } } },
                     { new: true }
                 )
                 return updatedUser
